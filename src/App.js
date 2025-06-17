@@ -41,32 +41,32 @@ const CareerCoachingApp = () => {
 
   const advisors = [
     {
-      name: "Alex Chen",
+      name: "Rahul Vekaria",
       role: "Senior Portfolio Manager",
       company: "Mutual Fund Co.",
       expertise: "Finance, Investment, Portfolio Management",
-      avatar: "AC"
+      avatar: "RV"
     },
     {
-      name: "Sarah Johnson",
+      name: "Rujuta Jariwala",
       role: "Banking Advisor",
       company: "First National Bank",
       expertise: "Banking, Financial Services, Client Relations",
-      avatar: "SJ"
+      avatar: "RJ"
     },
     {
-      name: "Mike Rodriguez",
+      name: "Archana Nair",
       role: "Executive Assistant",
       company: "Amazon",
       expertise: "Operations, C-Suite Support, Project Management",
-      avatar: "MR"
+      avatar: "AN"
     },
     {
-      name: "Priya Patel",
+      name: "Darshak Mota",
       role: "Senior IT Developer",
       company: "Tech Services Inc.",
       expertise: "Software Development, Tech Leadership, System Architecture",
-      avatar: "PP"
+      avatar: "DM"
     }
   ];
 
