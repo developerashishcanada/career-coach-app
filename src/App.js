@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Users, MessageCircle, Target, CheckCircle, ArrowRight, Star, Briefcase, GraduationCap, TrendingUp } from 'lucide-react';
 
 const CareerCoachingApp = () => {
   const [currentStep, setCurrentStep] = useState('home');
+  const [tailwindLoaded, setTailwindLoaded] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,6 +14,30 @@ const CareerCoachingApp = () => {
     careerGoal: '',
     resume: null
   });
+
+  // Ensure Tailwind CSS is loaded
+  useEffect(() => {
+    // Check if Tailwind is already loaded
+    const checkTailwind = () => {
+      const testElement = document.createElement('div');
+      testElement.className = 'bg-blue-500';
+      document.body.appendChild(testElement);
+      const styles = window.getComputedStyle(testElement);
+      const hasBlueBackground = styles.backgroundColor === 'rgb(59, 130, 246)';
+      document.body.removeChild(testElement);
+      return hasBlueBackground;
+    };
+
+    if (checkTailwind()) {
+      setTailwindLoaded(true);
+    } else {
+      // Load Tailwind if not already loaded
+      const script = document.createElement('script');
+      script.src = 'https://cdn.tailwindcss.com';
+      script.onload = () => setTailwindLoaded(true);
+      document.head.appendChild(script);
+    }
+  }, []);
 
   const advisors = [
     {
@@ -69,6 +94,40 @@ const CareerCoachingApp = () => {
     }, 3000);
   };
 
+  // Loading screen while Tailwind is loading
+  if (!tailwindLoaded) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#f8fafc',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '4px solid #e2e8f0',
+            borderTop: '4px solid #3b82f6',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 16px'
+          }}></div>
+          <h2 style={{ color: '#1e293b', marginBottom: '8px' }}>Loading CareerForward AI</h2>
+          <p style={{ color: '#64748b' }}>Preparing your career coaching experience...</p>
+        </div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   const HomePage = () => (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
@@ -83,7 +142,7 @@ const CareerCoachingApp = () => {
                 CareerForward AI
               </h1>
             </div>
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:shadow-md transition-all">
+            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:shadow-md transition-all duration-300 hover:scale-105">
               Sign In
             </button>
           </div>
@@ -103,11 +162,11 @@ const CareerCoachingApp = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               onClick={() => setCurrentStep('discovery')}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all flex items-center justify-center"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center"
             >
               Start Your Journey <ArrowRight className="ml-2 w-5 h-5" />
             </button>
-            <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-blue-500 hover:text-blue-600 transition-all">
+            <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-blue-500 hover:text-blue-600 transition-all duration-300">
               Watch Demo
             </button>
           </div>
@@ -183,7 +242,7 @@ const CareerCoachingApp = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {advisors.map((advisor, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div key={index} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-105">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-white font-bold text-lg">{advisor.avatar}</span>
@@ -206,7 +265,7 @@ const CareerCoachingApp = () => {
           <p className="text-xl text-blue-100 mb-8">Join thousands of professionals who've transformed their careers with CareerForward</p>
           <button 
             onClick={() => setCurrentStep('discovery')}
-            className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors"
+            className="bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition-colors duration-300"
           >
             Get Started Today
           </button>
@@ -233,7 +292,7 @@ const CareerCoachingApp = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -245,7 +304,7 @@ const CareerCoachingApp = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                   placeholder="your@email.com"
                 />
               </div>
@@ -258,7 +317,7 @@ const CareerCoachingApp = () => {
                 name="currentRole"
                 value={formData.currentRole}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 placeholder="e.g., Software Engineer, Marketing Assistant"
               />
             </div>
@@ -269,7 +328,7 @@ const CareerCoachingApp = () => {
                 name="targetIndustry"
                 value={formData.targetIndustry}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
               >
                 <option value="">Select target industry</option>
                 <option value="finance">Finance & Investment</option>
@@ -286,7 +345,7 @@ const CareerCoachingApp = () => {
                 name="experience"
                 value={formData.experience}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
               >
                 <option value="">Select experience level</option>
                 <option value="0-1">Fresh Graduate (0-1 years)</option>
@@ -303,14 +362,14 @@ const CareerCoachingApp = () => {
                 value={formData.careerGoal}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
                 placeholder="Describe what you want to achieve in your career..."
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Upload Resume</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors duration-300">
                 <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                 <input
                   type="file"
@@ -334,14 +393,14 @@ const CareerCoachingApp = () => {
               <button
                 type="button"
                 onClick={() => setCurrentStep('home')}
-                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-md transition-all"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-md transition-all duration-300"
               >
                 Analyze My Profile
               </button>
@@ -431,7 +490,7 @@ const CareerCoachingApp = () => {
           </div>
 
           <div className="text-center">
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:shadow-md transition-all">
+            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:shadow-md transition-all duration-300">
               Schedule Coffee Chat with Priya
             </button>
             <p className="text-sm text-gray-500 mt-2">30-minute session • Free consultation</p>
